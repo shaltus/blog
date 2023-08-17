@@ -1,1 +1,1 @@
-https://altinay-blog.vercel.app/
+https://altinay-blog-shaltus.vercel.app/
