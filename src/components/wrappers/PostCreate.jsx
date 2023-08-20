@@ -10,8 +10,13 @@ const PostCreate = ({ createPost, history, authorized }) => {
     if (values.tagList.length === 1 && values.tagList[0].length === 0) {
       values.tagList = [];
     }
-    createPost(values);
-    history.push('/articles/');
+    createPost(values).then((response) => {
+      if (response && response.payload && response.payload.slug) {
+        history.push(`/articles/${response.payload.slug}`);
+      } else {
+        console.error('Failed to retrieve slug from the created article.');
+      }
+    });
   };
 
   if (!authorized) return <Redirect to="/sign-in" />;

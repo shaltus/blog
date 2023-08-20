@@ -3,7 +3,6 @@ import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 import BlogApi from '../services/blog';
 
 const Api = new BlogApi();
-console.log(Api);
 
 const initialState = {
   posts: [],

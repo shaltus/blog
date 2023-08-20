@@ -5,13 +5,21 @@ import { Redirect } from 'react-router-dom';
 
 import { getPost, updatePost, clearPost } from '../../store/blog';
 import PostForm from '../visual/PostForm';
+import Error from '../visual/Error';
 
-const PostEdit = ({ match, history, authorized, postData, getPost, updatePost, clearPost }) => {
+const PostEdit = ({ match, history, user, authorized, postData, getPost, updatePost, clearPost }) => {
   const { slug } = match.params;
   useEffect(() => {
     getPost(slug);
     return clearPost;
   }, [slug]);
+  if (
+    JSON.stringify(user) !== '{}' &&
+    JSON.stringify(postData) !== '{}' &&
+    user.username !== postData.author.username
+  ) {
+    return <Error />;
+  }
 
   const onFinish = (postData) => {
     if (postData.tagList.length === 1 && postData.tagList[0].length === 0) {
