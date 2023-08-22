@@ -43,7 +43,7 @@ const config = {
   },
 };
 
-const PostForm = ({ title, description, body, tagList, isNew, onFinish }) => {
+const PostForm = ({ title, description, body, tagList, isNew, onFinish, disabled }) => {
   const [form] = useForm();
 
   useEffect(() => {
@@ -95,7 +95,7 @@ const PostForm = ({ title, description, body, tagList, isNew, onFinish }) => {
           )}
         </Form.List>
         <Form.Item>
-          <Button type="primary" htmlType="submit" className={css.button}>
+          <Button type="primary" htmlType="submit" disabled={disabled} className={css.button}>
             Save
           </Button>
         </Form.Item>
@@ -111,6 +111,7 @@ PostForm.defaultProps = {
   tagList: [''],
   isNew: true,
   onFinish: () => {},
+  disabled: false,
 };
 PostForm.propTypes = {
   title: propTypes.string,
@@ -119,6 +120,7 @@ PostForm.propTypes = {
   tagList: propTypes.array,
   isNew: propTypes.bool,
   onFinish: propTypes.func,
+  disabled: propTypes.bool,
 };
 
 export default PostForm;

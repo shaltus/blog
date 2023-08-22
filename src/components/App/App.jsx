@@ -1,8 +1,8 @@
 import propTypes from 'prop-types';
 import { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import { Layout, ConfigProvider } from 'antd';
 import cn from 'classnames';
 
@@ -15,7 +15,7 @@ import PostCreate from '../wrappers/PostCreate';
 import UserLogin from '../wrappers/UserLogin';
 import UserRegister from '../wrappers/UserRegister';
 import UserEdit from '../wrappers/UserEdit';
-import { getProfile } from '../../store/blog';
+import { getProfile, clearError } from '../../store/blog';
 
 import css from './App.module.scss';
 import 'react-toastify/dist/ReactToastify.css';
@@ -31,8 +31,10 @@ const App = ({ getProfile, authorized, loading, error }) => {
     }
   }, [authorized]);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    if (error) toast.error(error);
+    dispatch(clearError());
   }, [error]);
 
   return (
@@ -68,12 +70,14 @@ App.defaultProps = {
   authorized: false,
   loading: false,
   error: '',
+  clearError: () => {},
 };
 App.propTypes = {
   getProfile: propTypes.func,
   authorized: propTypes.bool,
   loading: propTypes.bool,
   error: propTypes.string,
+  clearError: propTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -84,4 +88,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { getProfile })(App);
+export default connect(mapStateToProps, { getProfile, clearError })(App);

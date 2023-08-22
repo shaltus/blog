@@ -78,8 +78,19 @@ const config = {
   },
 };
 
-export const Login = ({ onFinish }) => {
+export const Login = ({ onFinish, disabled, error }) => {
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (error) {
+      form.setFields([
+        {
+          name: 'password',
+          errors: [error],
+        },
+      ]);
+    }
+  }, [error, form]);
 
   return (
     <div className={cn(css.UserForm, 'borderRaduis', 'boxShadow')}>
@@ -92,7 +103,7 @@ export const Login = ({ onFinish }) => {
           <Input type="password" placeholder="Your Password" autoComplete="true" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" className={css.button}>
+          <Button type="primary" htmlType="submit" disabled={disabled} className={css.button}>
             Login
           </Button>
         </Form.Item>
@@ -110,8 +121,19 @@ Login.propTypes = {
   onFinish: propTypes.func,
 };
 
-export const Signup = ({ onFinish }) => {
+export const Signup = ({ onFinish, disabled, error }) => {
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (error) {
+      form.setFields([
+        {
+          name: 'email',
+          errors: [error],
+        },
+      ]);
+    }
+  }, [error, form]);
 
   return (
     <div className={cn(css.UserForm, 'borderRaduis', 'boxShadow')}>
@@ -133,7 +155,7 @@ export const Signup = ({ onFinish }) => {
           <Checkbox>I agree to the processing of my personal information</Checkbox>
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" className={css.button}>
+          <Button type="primary" htmlType="submit" className={css.button} disabled={disabled}>
             Create
           </Button>
         </Form.Item>
@@ -146,12 +168,14 @@ export const Signup = ({ onFinish }) => {
 };
 Signup.defaultProps = {
   onFinish: () => {},
+  disabled: false,
 };
 Signup.propTypes = {
   onFinish: propTypes.func,
+  disabled: propTypes.bool,
 };
 
-export const Edit = ({ username, image, email, onFinish }) => {
+export const Edit = ({ username, image, email, onFinish, disabled }) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -185,7 +209,7 @@ export const Edit = ({ username, image, email, onFinish }) => {
           <Input placeholder="Link to Avatar image" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" className={css.button}>
+          <Button type="primary" htmlType="submit" disabled={disabled} className={css.button}>
             Save
           </Button>
         </Form.Item>
@@ -198,10 +222,12 @@ Edit.defaultProps = {
   image: '',
   email: '',
   onFinish: () => {},
+  disabled: false,
 };
 Edit.propTypes = {
   username: propTypes.string,
   image: propTypes.string,
   email: propTypes.string,
   onFinish: propTypes.func,
+  disabled: propTypes.bool,
 };

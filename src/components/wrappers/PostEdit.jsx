@@ -7,7 +7,7 @@ import { getPost, updatePost, clearPost } from '../../store/blog';
 import PostForm from '../visual/PostForm';
 import Error from '../visual/Error';
 
-const PostEdit = ({ match, history, user, authorized, postData, getPost, updatePost, clearPost }) => {
+const PostEdit = ({ match, history, user, authorized, postData, getPost, updatePost, clearPost, disabled }) => {
   const { slug } = match.params;
   useEffect(() => {
     getPost(slug);
@@ -32,7 +32,7 @@ const PostEdit = ({ match, history, user, authorized, postData, getPost, updateP
 
   if (!authorized) return <Redirect to="/sign-in" />;
 
-  return <PostForm {...postData} isNew={false} onFinish={onFinish} />;
+  return <PostForm {...postData} isNew={false} onFinish={onFinish} disabled={disabled} />;
 };
 PostEdit.defaultProps = {
   match: {},
@@ -42,6 +42,7 @@ PostEdit.defaultProps = {
   getPost: () => {},
   updatePost: () => {},
   clearPost: () => {},
+  disabled: false,
 };
 PostEdit.propTypes = {
   match: propTypes.object,
@@ -51,6 +52,7 @@ PostEdit.propTypes = {
   getPost: propTypes.func,
   updatePost: propTypes.func,
   clearPost: propTypes.func,
+  disabled: propTypes.bool,
 };
 
 const mapStateToProps = (state) => {
@@ -58,6 +60,7 @@ const mapStateToProps = (state) => {
     postData: state.currentPost,
     user: state.user,
     authorized: state.authorized,
+    disabled: state.disabled,
   };
 };
 

@@ -1,1 +1,1 @@
-ссылка: https://altinay-blog-shaltus.vercel.app
+версел:  https://altinay-blog-shaltus.vercel.app 

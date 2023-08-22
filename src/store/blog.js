@@ -12,6 +12,7 @@ const initialState = {
   user: {},
   authorized: true,
   loading: true,
+  disabled: true,
   error: '',
 };
 
@@ -21,6 +22,9 @@ const blog = createSlice({
   reducers: {
     clearPost: (state) => {
       return { ...state, currentPost: {} };
+    },
+    clearError: (state) => {
+      return { ...state, error: '' };
     },
   },
   extraReducers: (builder) => {
@@ -87,25 +91,25 @@ const blog = createSlice({
     builder.addMatcher(
       (action) => action.type.endsWith('/pending'),
       (state) => {
-        return { ...state, loading: true };
+        return { ...state, loading: true, disabled: true };
       }
     );
     builder.addMatcher(
       (action) => action.type.endsWith('/rejected'),
       (state, action) => {
-        return { ...state, loading: false, error: action.error.message };
+        return { ...state, loading: false, disabled: false, error: action.error.message };
       }
     );
     builder.addMatcher(
       (action) => action.type.endsWith('/fulfilled'),
       (state) => {
-        return { ...state, loading: false };
+        return { ...state, loading: false, disabled: false };
       }
     );
   },
 });
 
-export const { clearPost } = blog.actions;
+export const { clearPost, clearError } = blog.actions;
 
 export const getPosts = createAsyncThunk('blog/getPosts', async (page) => {
   const res = await Api.articles.getList(page);
@@ -152,13 +156,14 @@ export const removePost = createAsyncThunk('blog/removePost', async (slug) => {
 
 export const register = createAsyncThunk('blog/register', async (userData) => {
   const res = await Api.user.register(userData);
-  if (res.errors) return Promise.reject('Something goes wrong');
+  if (res.errors) return Promise.reject('Email is already taken');
   return res.user;
 });
 
 export const signin = createAsyncThunk('blog/signin', async (userData) => {
   const res = await Api.user.login(userData);
   if (res.errors) return Promise.reject('Password or email is incorrect');
+  console.log(res);
   return res.user;
 });
 
